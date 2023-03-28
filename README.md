@@ -308,5 +308,5 @@ Errors are return in the following format:
 
 ### Screenshots
 
-![alt text](cd0037-API-Development-and-Documentation-project\screenshots\Screenshot 2023-03-28 234502.png)
-![alt text](cd0037-API-Development-and-Documentation-project\screenshots\Screenshot 2023-03-28 234630.png)
+![alt text](cd0037-API-Development-and-Documentation-project\screenshots\1.png)
+![alt text](cd0037-API-Development-and-Documentation-project\screenshots\2.png)

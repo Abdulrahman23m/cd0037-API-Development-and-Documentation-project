@@ -172,8 +172,6 @@ The `--reload` flag will detect file changes and restart the server automaticall
   "success": true,
   "total_questions": 18
 }
-
-
 ```
 
 #### POST /questions
@@ -199,11 +197,91 @@ The `--reload` flag will detect file changes and restart the server automaticall
 {
 "success": True,
 
-"created": question.id
+"created": 20
             }
 ```
 
-#### POST /questions
+#### POST /questions/search
+
+- Find a question buy searching the question body
+- Returns any substring found
+- Arguments: searchTerm
+- Response:
+
+```bash
+    {
+"success": True,
+"questions": [],
+"total_questions: 8
+    }
+```
+
+#### GET /categories/int:id/questions
+
+- Returns questions that belongs to a certion category, Given an category ID
+- URL sample http://127.0.0.1:5000/categories/1/questions
+- Response:
+
+```bash
+{
+  "current_category": "Science",
+  "questions": [
+    {
+      "answer": "The Liver",
+      "category": 1,
+      "difficulty": 4,
+      "id": 20,
+      "question": "What is the heaviest organ in the human body?"
+    },
+    {
+      "answer": "Alexander Fleming",
+      "category": 1,
+      "difficulty": 3,
+      "id": 21,
+      "question": "Who discovered penicillin?"
+    },
+    {
+      "answer": "Blood",
+      "category": 1,
+      "difficulty": 4,
+      "id": 22,
+      "question": "Hematology is a branch of medicine involving the study of what?"
+    }
+  ],
+  "success": true,
+  "total_questions": 3
+}
+
+```
+
+#### DELETE /questions/int:question_id
+
+- Deletes a guestion givin an ID
+- URL smaple http://127.0.0.1:5000/questions/18
+- Response:
+
+```bash
+{
+  "deleted_id": 18,
+  "success": true
+}
+```
+
+#### POST /quizzes
+
+- Returns a list of questions to play a quiz game
+- URL POST http://127.0.0.1:5000/quizzes
+- Arguments: quiz_category, previous_questions
+- Response:
+
+```bash
+{
+{
+  "success": true,
+  "question": []
+}
+}
+```
 
 ##
 
@@ -227,3 +305,8 @@ Errors are return in the following format:
 ```
 
 ##
+
+### Screenshots
+
+![alt text](cd0037-API-Development-and-Documentation-project\screenshots\Screenshot 2023-03-28 234502.png)
+![alt text](cd0037-API-Development-and-Documentation-project\screenshots\Screenshot 2023-03-28 234630.png)

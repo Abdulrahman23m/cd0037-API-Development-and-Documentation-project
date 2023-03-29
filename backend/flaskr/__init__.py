@@ -3,6 +3,7 @@ from flask import Flask, request, abort, jsonify
 from flask_sqlalchemy import SQLAlchemy
 from flask_cors import CORS
 import random
+from  sqlalchemy.sql.expression import func, select
 
 from models import setup_db, Question, Category
 
@@ -106,17 +107,17 @@ def create_app(test_config=None):
 
     @app.route('/questions/search', methods=["POST"])
     def search_question():
-        seearch_term = request.get_data()
+        search_term = request.get_data()
 
-        print(seearch_term)
-        questions = Question.query.filter(Question.question.contains("title")).all()
-        if len(questions)==0:
+        selection = Question.query.filter(Question.question.ilike(f'%{search_term}%')).all()
+        search_questions = paginate_question(request, selection)
+        if search_questions == None:
             abort(404)
-        question = [question.format() for question in questions]
+
         return jsonify({
             'success': True,
-            "questions":question,
-            "total_questions": len(question),
+            "questions":list(search_questions),
+            "total_questions": len(search_questions),
         })
     @app.route('/categories/<int:id>/questions')
     def get_category_questions(id):
@@ -146,26 +147,15 @@ def create_app(test_config=None):
             abort(400)
         #check if all categories has been selected 
         if quiz_category['id']==0:
-            questions = Question.query.filter(Question.id.notin_(previous_questions)).limit(1).one_or_none()
+            questions = Question.query.order_by(func.random()).filter(Question.id.notin_(previous_questions)).limit(1).one_or_none()
         else:
-            questions = Question.query.filter_by(category = quiz_category['id']).filter(Question.id.notin_(previous_questions) ).limit(1).one_or_none()
-        if len(questions.format())==0:
-            abort(404)
+            questions = Question.query.order_by(func.random()).filter_by(category = quiz_category['id']).filter(Question.id.notin_(previous_questions) ).limit(1).one_or_none()
+        if questions is None:
+            return jsonify({'success': False})
         return jsonify({"success": True, "question": questions.format()})
 
 
-    """
-    @TODO:
-    Create a POST endpoint to get questions to play the quiz.
-    This endpoint should take category and previous question parameters
-    and return a random questions within the given category,
-    if provided, and that is not one of the previous questions.
-
-    TEST: In the "Play" tab, after a user selects "All" or a category,
-    one question at a time is displayed, the user is allowed to answer
-    and shown whether they were correct or not.
-    """
-
+  
 
     @app.errorhandler(404)
     def not_found(error):
